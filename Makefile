@@ -1,0 +1,32 @@
+#!make
+
+include .env
+
+all : front server
+
+front :
+	cp .env ./front 
+	cd front && yarn install && yarn build &&  pm2 serve --spa ./dist ${CLIENT_PORT} --name front
+
+server :
+	cd server && npm install && pm2 start server.js
+
+clean :
+	pm2 kill
+
+fclean :
+	pm2 kill front
+
+sclean :
+	pm2 kill server
+
+re : clean
+	make all
+
+fre : fclean
+	make front
+
+sre : sclean
+	make server
+
+.PHONY : all clean fclean sclean fre sre re front server
