@@ -4,6 +4,10 @@ include .env
 
 all : front server
 
+dev : 
+	cp .env ./front
+	cd front && yarn install && yarn dev
+
 front :
 	cp .env ./front 
 	cd front && yarn install && yarn build &&  pm2 serve --spa ./dist ${CLIENT_PORT} --name front
@@ -15,10 +19,10 @@ clean :
 	pm2 kill
 
 fclean :
-	pm2 kill front
+	pm2 kill -n front
 
 sclean :
-	pm2 kill server
+	pm2 kill -n server
 
 re : clean
 	make all
